@@ -90,7 +90,6 @@ router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("req", req);
     return res.json(req.user);
   }
 );
