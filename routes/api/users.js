@@ -38,18 +38,6 @@ router.post("/register", (req, res) => {
     email
   });
 
-  // bcrypt.genSalt(10, (err, salt) => {
-  //   bcrypt.hash(newUser.password, salt, (err, hash) => {
-  //     if (err) throw err;
-  //     newUser.password = hash;
-  //     newUser.save().then(user => {
-  //       return res.status(201).json({
-  //         success: true,
-  //         msg: "User is registerd successfully"
-  //       });
-  //     });
-  //   });
-  // });
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err;
@@ -102,6 +90,7 @@ router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log("req", req);
     return res.json(req.user);
   }
 );

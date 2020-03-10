@@ -20,7 +20,7 @@ require("./config/passport")(passport);
 
 const db = require("./config/keys").mongoURI;
 mongoose
-  .connect(db, { useNewUrlParser: true })
+  .connect(db, { useUnifiedTopology: true, useNewUrlParser: true })
   .then(() => {
     console.log(`Database connected successfully ${db}`);
   })
@@ -28,9 +28,10 @@ mongoose
     console.log(`Unable to connect with the database ${err}`);
   });
 
-// app.get('/', (req, res) => {
-//   return res.send("<h1>Hello</h1>");
-// });
+app.get("/", (req, res) => {
+  return res.send("<h1>Hello</h1>");
+});
+
 const users = require("./routes/api/users");
 app.use("/api/users", users);
 
