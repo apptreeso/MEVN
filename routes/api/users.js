@@ -6,7 +6,7 @@ const passport = require("passport");
 const key = require("../../config/keys").secret;
 const User = require("../../model/User");
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   let { name, username, email, password, confirm_password } = req.body;
 
   if (password !== confirm_password) {
@@ -15,21 +15,19 @@ router.post("/register", (req, res) => {
     });
   }
 
-  User.findOne({ username: username }).then(user => {
-    if (user) {
-      return res.status(400).json({
-        msg: "Username already exists"
-      });
-    }
-  });
+  let user = await User.findOne({ username: username });
+  if (user) {
+    return res.status(400).json({
+      msg: "Username already exists"
+    });
+  }
 
-  User.findOne({ email: email }).then(user => {
-    if (user) {
-      return res.status(400).json({
-        msg: "Email already exists"
-      });
-    }
-  });
+  user = await User.findOne({ email: email });
+  if (user) {
+    return res.status(400).json({
+      msg: "Email already exists"
+    });
+  }
 
   let newUser = new User({
     name,
@@ -37,7 +35,7 @@ router.post("/register", (req, res) => {
     password,
     email
   });
-
+  console.log(newUser);
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err;
@@ -51,11 +49,11 @@ router.post("/register", (req, res) => {
     });
   });
 });
-
+302;
 router.post("/login", (req, res) => {
   User.findOne({ username: req.body.username }).then(user => {
     if (!user) {
-      return json.status(404).json({
+      return res.status(404).json({
         msg: "Username is not found",
         success: false
       });
@@ -72,12 +70,13 @@ router.post("/login", (req, res) => {
         jwt.sign(payload, key, { expiresIn: 604800 }, (err, token) => {
           res.status(200).json({
             success: true,
+            user: user,
             token: `Bearer ${token}`,
             msg: " You're logged in"
           });
         });
       } else {
-        return json.status(404).json({
+        return res.status(404).json({
           msg: "Incorrect password",
           success: false
         });
