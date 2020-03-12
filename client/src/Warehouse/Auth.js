@@ -44,6 +44,12 @@ const actions = {
     delete axios.defaults.headers.common["Authorization"];
     router.push("/login");
     return;
+  },
+  async getProfile({ commit }) {
+    commit("profile_request");
+    let res = await axios.get("http://localhost:5000/api/users/profile");
+    commit("user_profile", res.data);
+    return res;
   }
 };
 
@@ -66,6 +72,12 @@ const mutations = {
     state.status = "";
     state.token = "";
     state.user = "";
+  },
+  profile_request(state) {
+    state.status = "loading";
+  },
+  user_profile(state, user) {
+    state.user = user;
   }
 };
 
