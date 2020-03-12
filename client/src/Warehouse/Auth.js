@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "../router";
 // import router from "../router";
 
 const state = {
@@ -16,7 +17,6 @@ const getters = {
 const actions = {
   async login({ commit }, user) {
     commit("auto_request");
-    console.log(user);
     let res = await axios.post("http://localhost:5000/api/users/login", user);
     if (res.data.success) {
       const token = res.data.token;
@@ -27,6 +27,24 @@ const actions = {
       commit("auth_success", token, user);
     }
     return res;
+  },
+  async register({ commit }, userData) {
+    commit("register_request");
+    let res = await axios.post(
+      "http://localhost:5000/api/users/register",
+      userData
+    );
+    if (res.data.success) {
+      commit("register_success");
+    }
+    return res;
+  },
+  async logout({ commit }) {
+    await localStorage.removeItem("token");
+    commit("logout");
+    delete axios.defaults.headers.common["Authorization"];
+    router.push("/login");
+    return;
   }
 };
 
@@ -34,10 +52,21 @@ const mutations = {
   auto_request(state) {
     state.status = "loading";
   },
-  auto_succes(state, token, user) {
+  auth_success(state, token, user) {
     state.status = "success";
     state.token = token;
     state.user = user;
+  },
+  register_request(state) {
+    state.status = "loading";
+  },
+  register_success(state) {
+    state.status = "success";
+  },
+  logout(state) {
+    state.status = "";
+    state.token = "";
+    state.user = "";
   }
 };
 

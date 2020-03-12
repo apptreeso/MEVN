@@ -9,8 +9,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
 const token = localStorage.getItem("token");
 if (token) {
-  console.log(token);
-  Vue.prototype.$http.defaults.headers.commmon["Authorization"] = token;
+  Vue.prototype.$http.defaults.headers.common["Authorization"] = token;
 }
 
 new Vue({
