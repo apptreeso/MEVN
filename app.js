@@ -28,12 +28,16 @@ mongoose
     console.log(`Unable to connect with the database ${err}`);
   });
 
-app.get("/", (req, res) => {
-  return res.send("<h1>Hello</h1>");
-});
+// app.get("/", (req, res) => {
+//   return res.send("<h1>Hello</h1>");
+// });
 
 const users = require("./routes/api/users");
 app.use("/api/users", users);
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public/index.html"));
+// });
 
 const PORT = process.env.PORT || 5000;
 
