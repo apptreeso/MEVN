@@ -2,7 +2,7 @@
   <div>
     <h2>Profile</h2>
     <div class="class">
-      <ul class="list-group">
+      <ul class="list-group" v-if="user">
         <li class="list-group-item">Email: {{ user.email }}</li>
         <li class="list-group-item">Username: {{ user.username }}</li>
         <li class="list-group-item">Name: {{ user.name }}</li>
